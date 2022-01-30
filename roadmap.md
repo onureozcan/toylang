@@ -1,15 +1,16 @@
 # 1 - Simple Binary 
 # 2 - Simple Expressions
 # 3 - C function bindings
-# 4 - Control Flow
-# 5 - Functions 
-# 6 - Performance Testing and Improvements 
-# 7 - Structs (Objects)
-# 8 - Closures
-# 9 - Imports
-# 10 - Inheritance 
-# 11 - Try catch
-# 12 - Generic Types 
-# 13 - Gc
-# 14 - Performance Testing and Improvements 
+# 4 - Strings
+# 5 - Control Flow
+# 6 - Functions 
+# 7 - Performance Testing and Improvements 
+# 8 - Structs (Objects)
+# 9 - Closures
+# 10 - Imports
+# 11 - Inheritance 
+# 12 - Try catch
+# 13 - Generic Types 
+# 14 - Gc
+# 15 - Performance Testing and Improvements 
 --- version ---
