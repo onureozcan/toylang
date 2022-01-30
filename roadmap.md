@@ -8,6 +8,8 @@
 # 8 - Closures
 # 9 - Imports
 # 10 - Inheritance 
-# 11 - Generic Types 
-# 12 - Gc
+# 11 - Try catch
+# 12 - Generic Types 
+# 13 - Gc
+# 14 - Performance Testing and Improvements 
 --- version ---
