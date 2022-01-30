@@ -1,3 +1,5 @@
 *.o
 *.a
+*.jar
 build/
+**/generated/**/*.*
