@@ -1,0 +1,4 @@
+[submodule "lib/antlr"]
+	path = lib/antlr
+	url = https://github.com/antlr/antlr4.git
+	ignore = all
