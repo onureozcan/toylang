@@ -1,5 +1,8 @@
 *.o
 *.a
 *.jar
-build/
+build/*
 **/generated/**/*.*
+
+#dont ignore makefile
+!build/Makefile

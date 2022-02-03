@@ -1,7 +1,7 @@
-PROJECT_DIR = $(shell pwd)
+BUILD_DIR = $(shell pwd)
+PROJECT_DIR = $(BUILD_DIR)/..
 SRC_DIR = $(PROJECT_DIR)/src
 INCLUDE_DIR = $(PROJECT_DIR)/include
-BUILD_DIR = $(PROJECT_DIR)/build
 
 ANTLR_SUBMODULE_DIR = $(PROJECT_DIR)/lib/antlr/
 ANTLR_CPP_PATH = $(PROJECT_DIR)/lib/antlr/runtime/Cpp
@@ -12,7 +12,7 @@ ANTLR_STATIC_LIB = $(BUILD_DIR)/lib$(ANTLR_STATIC_LIB_NAME).a
 ANTLR_OBJECTS_DIR = $(BUILD_DIR)/antlr.a
 
 ANTLR_JAR = antlr-4.9.2-complete.jar
-ANTLR_JAR_PATH = $(PROJECT_DIR)/$(ANTLR_JAR)
+ANTLR_JAR_PATH = $(BUILD_DIR)/$(ANTLR_JAR)
 
 ANTLR_GENERATED_SRC_PATH = $(SRC_DIR)/generated/antlr
 
@@ -20,40 +20,43 @@ EXECUTABLE = $(BUILD_DIR)/toylang
 
 CPP_FLAGS = -std=c++11 -DANTLR4CPP_STATIC
 
-build: build_dir antlr_jar antlr.a antlr_generated.o main
+SRCS:=$(shell find $(SRC_DIR)/. -name *.cpp)
+
+build: build_dir libantlr_static.a $(EXECUTABLE) 
 
 build_dir:
 	mkdir -p $(BUILD_DIR)
 	mkdir -p $(ANTLR_OBJECTS_DIR)
 
-antlr_jar:
-	test -f $(ANTLR_JAR_PATH) || (wget https://www.antlr.org/download/$(ANTLR_JAR))
+$(ANTLR_JAR):
+	wget https://www.antlr.org/download/$(ANTLR_JAR) -O $(ANTLR_JAR)
 
-antlr_generate: $(SRC_DIR)/TLexer.g4 $(SRC_DIR)/TParser.g4 
+antlr_generate_sources: $(ANTLR_JAR) $(SRC_DIR)/TLexer.g4 $(SRC_DIR)/TParser.g4
 	chmod +x $(ANTLR_JAR_PATH)
 	mkdir -p $(ANTLR_GENERATED_SRC_PATH)
 	rm -rf $(ANTLR_GENERATED_SRC_PATH)/*
 	java -jar $(ANTLR_JAR_PATH) -Dlanguage=Cpp $(SRC_DIR)/TLexer.g4 $(SRC_DIR)/TParser.g4 -o $(ANTLR_GENERATED_SRC_PATH)
+	touch antlr_generate_sources
 
-antlr_generated.o: antlr_generate 
+build_antlr_generated: antlr_generate_sources 
 	cd $(BUILD_DIR) && \
 	g++ -c $(CPP_FLAGS) \
 	-I $(ANTLR_GENERATED_SRC_PATH) \
 	-I $(ANTLR_SRC_PATH) \
 	$(ANTLR_GENERATED_SRC_PATH)/*.cpp 
+	touch build_antlr_generated
 
-main: $(SRC_DIR)/main.cpp
+$(EXECUTABLE): build_antlr_generated $(shell find $(SRC_DIR) -type f) $(shell find $(INCLUDE_DIR) -type f)
 	cd $(BUILD_DIR) && \
 	g++ $(CPP_FLAGS) \
 	-I $(INCLUDE_DIR) \
 	-I $(ANTLR_SRC_PATH) \
 	-L $(BUILD_DIR) \
 	-l $(ANTLR_STATIC_LIB_NAME) \
-	$(SRC_DIR)/main.cpp \
+	$(SRCS) \
 	-o $(EXECUTABLE)
 
-antlr.o:
-	test -f $(ANTLR_STATIC_LIB) || \
+libantlr_static.a:
 	(cd $(ANTLR_SUBMODULE_DIR) && git reset --hard 4dfacf63e228d616232df90e4273e608d69a7f44 && \
 	cd $(ANTLR_OBJECTS_DIR); \
   	g++ -c $(CPP_FLAGS) \
@@ -73,9 +76,8 @@ antlr.o:
    $(ANTLR_SRC_PATH)/tree/*.cpp \
    $(ANTLR_SRC_PATH)/tree/pattern/*.cpp \
    $(ANTLR_SRC_PATH)/tree/xpath/*.cpp) 
-
-antlr.a: antlr.o
-	test -f $(ANTLR_STATIC_LIB) || (ar rcs $(ANTLR_STATIC_LIB) $(ANTLR_OBJECTS_DIR)/*.o)
+	ar rcs $(ANTLR_STATIC_LIB) $(ANTLR_OBJECTS_DIR)/*.o
 
 clean:
-	rm -rf $(BUILD_DIR)/*
+	find . ! -name 'Makefile' -type f -exec rm -f {} +
+
