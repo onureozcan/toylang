@@ -22,9 +22,9 @@ CPP_FLAGS = -std=c++11 -DANTLR4CPP_STATIC
 
 SRCS:=$(shell find $(SRC_DIR)/. -name *.cpp)
 
-build: build_dir libantlr_static.a $(EXECUTABLE) 
+build: $(BUILD_DIR) libantlr_static.a $(EXECUTABLE) 
 
-build_dir:
+$(BUILD_DIR): $(ANTLR_OBJECTS_DIR)
 	mkdir -p $(BUILD_DIR)
 	mkdir -p $(ANTLR_OBJECTS_DIR)
 
@@ -38,22 +38,14 @@ antlr_generate_sources: $(ANTLR_JAR) $(SRC_DIR)/TLexer.g4 $(SRC_DIR)/TParser.g4
 	java -jar $(ANTLR_JAR_PATH) -Dlanguage=Cpp $(SRC_DIR)/TLexer.g4 $(SRC_DIR)/TParser.g4 -o $(ANTLR_GENERATED_SRC_PATH)
 	touch antlr_generate_sources
 
-build_antlr_generated: antlr_generate_sources 
-	cd $(BUILD_DIR) && \
-	g++ -c $(CPP_FLAGS) \
-	-I $(ANTLR_GENERATED_SRC_PATH) \
-	-I $(ANTLR_SRC_PATH) \
-	$(ANTLR_GENERATED_SRC_PATH)/*.cpp 
-	touch build_antlr_generated
-
-$(EXECUTABLE): build_antlr_generated $(shell find $(SRC_DIR) -type f) $(shell find $(INCLUDE_DIR) -type f)
-	cd $(BUILD_DIR) && \
+$(EXECUTABLE): antlr_generate_sources $(shell find $(SRC_DIR) -type f) $(shell find $(INCLUDE_DIR) -type f)
 	g++ $(CPP_FLAGS) \
 	-I $(INCLUDE_DIR) \
 	-I $(ANTLR_SRC_PATH) \
+	-I $(ANTLR_GENERATED_SRC_PATH) \
+	$(SRCS) \
 	-L $(BUILD_DIR) \
 	-l $(ANTLR_STATIC_LIB_NAME) \
-	$(SRCS) \
 	-o $(EXECUTABLE)
 
 libantlr_static.a:
@@ -76,7 +68,7 @@ libantlr_static.a:
    $(ANTLR_SRC_PATH)/tree/*.cpp \
    $(ANTLR_SRC_PATH)/tree/pattern/*.cpp \
    $(ANTLR_SRC_PATH)/tree/xpath/*.cpp) 
-	ar rcs $(ANTLR_STATIC_LIB) $(ANTLR_OBJECTS_DIR)/*.o
+	ar -rc $(ANTLR_STATIC_LIB) $(ANTLR_OBJECTS_DIR)/*.o 
 
 clean:
 	find . ! -name 'Makefile' -type f -exec rm -f {} +

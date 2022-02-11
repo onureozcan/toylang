@@ -1,15 +1,20 @@
 #include "antlr4-runtime.h"
+#include "TParser.h"
+#include "TLexer.h"
 
 using namespace std;
+using namespace antlr4;
 
-int main() {
+int main(int argc, char* argv[]) {
     
-    return 0;
-}
+    string fileName = argv[1];
+    cout << fileName;
+    ifstream stream;
+    stream.open(fileName);
 
-static string readFile(const string &fileName) {
-    ifstream t(fileName);
-    stringstream buffer;
-    buffer << t.rdbuf();
-    return buffer.str();
+    ANTLRInputStream input(stream);
+    TLexer lexer(&input);
+    CommonTokenStream tokens(&lexer);
+    TParser parser(&tokens);
+    return 0;
 }
