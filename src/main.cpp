@@ -1,16 +1,22 @@
 
 #include <ast/ast.h>
-#include <ast/fnc.h>
+#include <compiler/x64.h>
 
 using namespace std;
-using namespace antlr4;
 using namespace toylang;
 
 int main(int argc, char* argv[]) {
     
     string fileName = argv[1];
     
+    ofstream outFile;
+    outFile.open (fileName + ".asm");
+
     Ast ast = Ast::fromFile(fileName);
-    
+    string asmCode = x64Compiler::compile(ast);
+
+    outFile << asmCode;
+    outFile.close();
+
     return 0;
 }
