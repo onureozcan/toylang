@@ -1,4 +1,0 @@
-global ty_main
-ty_main:
-_home_onur_projects_toyLang_build____test_expressions_01_ty:
-ret

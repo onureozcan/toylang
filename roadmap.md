@@ -5,6 +5,7 @@
 # [] - Functions 
 # [] - Performance Testing and Improvements 
 # [] - Structs (Objects)
+# [] - Collections 
 # [] - Closures
 # [] - Imports
 # [] - Inheritance 

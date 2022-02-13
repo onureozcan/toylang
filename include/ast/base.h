@@ -18,7 +18,5 @@ namespace toylang {
         private:
             Token* start;
             string fileName;
-
     };
-
 }

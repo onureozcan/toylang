@@ -1,7 +1,6 @@
 #pragma once
 
 #include <ast/fnc.h>
-
 #include "antlr4-runtime.h"
 
 using namespace std;
