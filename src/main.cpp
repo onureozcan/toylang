@@ -13,6 +13,7 @@ int main(int argc, char* argv[]) {
     outFile.open (fileName + ".asm");
 
     Ast ast = Ast::fromFile(fileName);
+    ast.isMain = true;
     string asmCode = x64Compiler::compile(ast);
 
     outFile << asmCode;

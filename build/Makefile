@@ -2,6 +2,7 @@ BUILD_DIR = $(shell pwd)
 PROJECT_DIR = $(BUILD_DIR)/..
 SRC_DIR = $(PROJECT_DIR)/src
 INCLUDE_DIR = $(PROJECT_DIR)/include
+TEST_FILES_DIR = $(PROJECT_DIR)/test
 
 ANTLR_SUBMODULE_DIR = $(PROJECT_DIR)/lib/antlr/
 ANTLR_CPP_PATH = $(PROJECT_DIR)/lib/antlr/runtime/Cpp
@@ -21,6 +22,11 @@ EXECUTABLE = $(BUILD_DIR)/toylang
 CPP_FLAGS = -std=c++11 -DANTLR4CPP_STATIC
 
 SRCS:=$(shell find $(SRC_DIR)/. -name *.cpp)
+
+test: 
+	$(EXECUTABLE) $(TEST_FILES_DIR)/$(FILE) 
+	nasm -f elf64 -o $(BUILD_DIR)/out.o $(TEST_FILES_DIR)/$(FILE).asm 
+	g++ $(BUILD_DIR)/out.o -o out
 
 build: $(BUILD_DIR) libantlr_static.a $(EXECUTABLE) 
 
