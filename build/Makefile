@@ -26,7 +26,7 @@ SRCS:=$(shell find $(SRC_DIR)/. -name *.cpp)
 test: 
 	$(EXECUTABLE) $(TEST_FILES_DIR)/$(FILE) 
 	nasm -f elf64 -o $(BUILD_DIR)/out.o $(TEST_FILES_DIR)/$(FILE).asm 
-	g++ $(BUILD_DIR)/out.o -o out
+	gcc $(BUILD_DIR)/out.o $(SRC_DIR)/wrapper/main.c -o out
 
 build: $(BUILD_DIR) libantlr_static.a $(EXECUTABLE) 
 

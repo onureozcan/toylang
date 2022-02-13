@@ -7,6 +7,11 @@ using namespace toylang;
 
 int main(int argc, char* argv[]) {
     
+    if (argc < 2) {
+        cerr << "expected file";
+        return 1;
+    }
+
     string fileName = argv[1];
     
     ofstream outFile;
