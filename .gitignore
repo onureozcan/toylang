@@ -1,0 +1,10 @@
+*.o
+*.a
+*.jar
+build/*
+**/generated/**/*.*
+
+src/.antlr
+
+#dont ignore makefile
+!build/Makefile
