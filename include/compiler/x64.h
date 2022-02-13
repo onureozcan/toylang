@@ -4,12 +4,10 @@
 
 using namespace std;
 
-namespace toylang
-{
+namespace toylang {
     class x64Compiler {
 
         public:
             static string compile(Ast ast);
-        
     };
 } 
