@@ -10,9 +10,9 @@ namespace toylang {
     class Ast {
 
         public:
-        FncAst* rootFnc;
-        bool isMain;
+            FncAst* rootFnc;
+            bool isMain;
 
-        static Ast fromFile(string fileName);
+            static Ast fromFile(string fileName);
     };
 }
