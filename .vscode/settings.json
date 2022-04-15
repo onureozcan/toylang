@@ -1,0 +1,7 @@
+{
+    "git.autoRepositoryDetection": "openEditors",
+    "files.associations": {
+        "string": "cpp",
+        "typeinfo": "cpp"
+    }
+}

@@ -13,6 +13,7 @@ namespace toylang {
         public:
             FncAst(string fileName, Token* token) : BaseAst(fileName, token) {};
             string name;
+            vector<BaseAst> statements;
 
             static FncAst* from(TParser::ProgramContext* program, string fileName);
     };
